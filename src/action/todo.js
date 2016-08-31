@@ -4,6 +4,6 @@ export const ADD_TODO = 'ADD_TODO'
 
 
 // action creators
-export function addTodo(txt) {
-  return { type: ADD_TODO,  txt};
+export function addTodo(text) {
+  return { type: ADD_TODO,  text};
 }
