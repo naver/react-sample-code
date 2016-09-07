@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../../action/todo';
+import { addTodo2 } from '../../action/todo';
 
 class Header extends Component {
 
@@ -26,9 +26,9 @@ class Header extends Component {
 let headerDispatchToProps = (dispatch) => {
     return {
         onClick(txt){
-          dispatch(addTodo(txt))
+          dispatch(addTodo2(txt))
         }
     }
 }
-
+// connect는 prop으로 연결하는 부분은 container component에 사용한다.
 export default connect(undefined, headerDispatchToProps)(Header);
