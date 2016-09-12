@@ -9,9 +9,9 @@ export function addTodo(text) {
 }
 
 export function addTodo2(text) {
-  return function (dispatch) {
+  return (dispatch) => {
 	return fetch("api/add.json").then(
-		res => res.json().then( data => dispatch(addTodo(data.status)))
+		res => res.json().then(data => dispatch(addTodo(data.status)))
 	);
   };
 }
