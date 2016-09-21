@@ -23,7 +23,7 @@ class Header extends Component {
   }
 }
 
-let headerDispatchToProps = (dispatch) => {
+const headerDispatchToProps = (dispatch) => {
     return {
         onClick(txt){
           dispatch(addTodo2(txt))

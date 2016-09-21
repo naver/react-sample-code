@@ -1,12 +1,18 @@
 import React from 'react';
-import configStore from './store/index';
+import configureStore from './store/index';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import reducer from './reducer/index';
 import App from './component/App'
 import './index.css';
 
-const store = configStore(reducer);
+const store = configureStore(reducer,{
+	"todos" : [
+		{"id":1, "todo":"빨래하기", "complete":false},
+		{"id":2, "todo":"청소하기", "complete":false},
+		{"id":3, "todo":"공부하기", "complete":false}
+	]
+});
 
 const render = () => {
   ReactDOM.render(
