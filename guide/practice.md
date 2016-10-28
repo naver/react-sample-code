@@ -32,7 +32,7 @@ npm run build // production mode로 파일 빌드해서 build폴더에 생성
 `action`폴더는 사용하는 명령어와 API통신등의 작업을 하는 `action메서드`들로 구성된 파일이다. 어떤 서비스의 경우에는 모든 command와 action을 한곳에 모아두기도 하고, 각 도메인 별로 구분하기도 한다.
 API와 같이 비동기 통신이 필요한 경우는 뒤(#비동기_처리)에서 다룰 [react-thunk](https://github.com/gaearon/redux-thunk), [react-saga](https://github.com/barbuza/react-saga)을 사용해야 하기 때문에 간단한 예제를 작성한다.
 
-![image][https://media.oss.navercorp.com/user/244/files/9ff473ce-9d30-11e6-8d8c-4ded3cb8f79d]
+![image](https://media.oss.navercorp.com/user/244/files/9ff473ce-9d30-11e6-8d8c-4ded3cb8f79d)
 
 **[action/todo.js]**
 ```js
