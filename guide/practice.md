@@ -211,7 +211,7 @@ export function addTodo2(text) {
 }
 ```
 
-## 로깅하기
+### 로깅하기
 로깅에서도 활용할 수 있다. [간단하게 직접 구현](https://dobbit.github.io/redux/docs_kr/advanced/Middleware.html#%EC%9D%BC%EA%B3%B1%EA%B0%80%EC%A7%80-%EC%98%88%EC%8B%9C) 할 수 있지만, [`redux-logger`](https://github.com/evgenyrodionov/redux-logger) 와 같은 라이브러리를 사용하여 로깅을 할 수 있다.
 
 ```js
@@ -290,7 +290,7 @@ class TODO extends Component {
 
 요약하면, 컴포넌트 자체의 상태(색상, 애니메이션...)는 `state`로 처리하고 전체적으로 관리(Ajax..)해야 하는 경우는 부모에게 `prop`으로 받아서 처리한다. 물론 `prop`의 경우는 App전반적으로 갱신이 되기 때문에 비교적 `state`보다는 느릴 수 밖에 없기 때문에 효과적으로 `state`을 사용하면 좋지만, `prop`으로 처리해야 하는 이슈를 `state`로 처리하는 건 코드를 더 어렵게 한다. 좀 더 자세한 내용은 [props vs state](https://github.com/uberVU/react-guide/blob/master/props-vs-state.md)이 도움이 된다.
 
-## connect
+### connect
 `prop`은 `state`와 다르게 `container component`에서 관리한다. 그래서 `container component`에서 `presentational component`으로 전달해야 하는데 이 때 사용하는 메서드가 `react-redux`에서 제공하는 `connect`이다.
 
 **[component/todolist/TODOList.js]**
@@ -349,7 +349,7 @@ class TODO extends Component {
 connect는 2가지을 인자로 받는데 첫 번째는 인자로 현재 `state`을 받는 함수와 두 번째는 `dispatch`을 인자로 받는 함수이다. 첫 번째 함수는 속성을 전달할 때 사용되며 전달할 때 값을 가공할 수 있다. 두 번째 함수는 dispatch을 전달 받아 사용한다. 
 
 
-## propTypes/defaultProps
+### propTypes/defaultProps
 prop은 타입과 기본 값을 propTypes와 defaultProps으로 설정할 수 있다.
 ```js
 
