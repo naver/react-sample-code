@@ -365,6 +365,70 @@ TODO.defaultProps = {
 ```
 `propTypes`은 개발 모드에서만 동작하며, 자세한 타입의 종류는 [propTypes](https://facebook.github.io/react/docs/reusable-components.html#prop-validation)에서 확인할 수 있다.
 
-
-
 ## 디버깅 도구
+앞에서 middleware을 통해서 간단하게 로깅을 할 수도 있지만, 좀 더 자세히 디버깅을 하고 싶다면 개발자 도구을 사용할 수 있다. 
+
+### 설치 방법
+[redux-devtools](https://github.com/gaearon/redux-devtools)을 사용하여 [직접 설정](https://github.com/gaearon/redux-devtools/blob/master/docs/Walkthrough.md)해 아래와 같이 사용할 수 있다. 
+
+```js
+import { createStore, applyMiddleware, compose } from 'redux';
+import rootReducer from '../reducers';
+import DevTools from '../containers/DevTools';
+
+const enhancer = compose(
+  // Middleware you want to use in development:
+  applyMiddleware(d1, d2, d3),
+  // Required! Enable Redux DevTools with the monitors you chose
+  DevTools.instrument()
+);
+
+export default function configureStore(initialState) {
+  // Note: only Redux >= 3.1.0 supports passing enhancer as third argument.
+  // See https://github.com/rackt/redux/releases/tag/v3.1.0
+  const store = createStore(rootReducer, initialState, enhancer);
+
+  // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
+  if (module.hot) {
+    module.hot.accept('../reducers', () =>
+      store.replaceReducer(require('../reducers')/*.default if you use Babel 6+ */)
+    );
+  }
+
+  return store;
+}
+```
+하지만, 설정하기 귀찮다면, [redux-devtools-extension](https://github.com/zalmoxisus/redux-devtools-extension)을 사용하여 쉽게 디버깅할 수 있다. 먼저 [각 브라우저에 맞는 extension](https://github.com/zalmoxisus/redux-devtools-extension#installation)을 설치하고 아래와 같이 등록한다.
+```js
+import { createStore, compose, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+
+export default function configureStore(reducer, initialState = {}) {
+	const enhancer = compose(
+		applyMiddleware(thunk/* , middleware 추가*/),
+		window.devToolsExtension ? window.devToolsExtension() : f => f
+	);
+
+	return createStore(reducer, initialState, enhancer);
+}
+
+```
+> [compose](http://redux.js.org/docs/api/compose.html) 메서드는 뒤에 있는 함수의 반환 결과를 파라메터로 전달하여 사용할 수 있게 하는 메서드이다. 이를 통해서 pipe처럼 통과하기 때문에 모든 행위를 트랙킹하고 값을 저장할 수 있다.
+
+### 간단한 소개
+devtools을 사용하면, store변경. action의 실행등 다양한 정보들이 저장되기 때문에 어떻게 store값이 변경이 되었는지, 혹은 어떤 action들이 실행되었는지 실시간으로 확인할 수 있고 이를 되돌리거나 재실행할 수 있다.
+
+이를 디버깅을 하는데 매우 도움이 되면 자주 사용하는 기능 몇 가지를 확인해보자.
+
+#### Slider Monitoring
+변경된 상태를 보관하기 있기 때문에 어떻게 변경이 되었는지 아래와 같이 slider을 통해 왔다 갔다 할 수 있다.
+![image](https://media.oss.navercorp.com/user/244/files/50a11bc6-79a2-11e6-8c8d-fb754ef917a5)
+
+#### Diff Monitoring
+상태가 어떻게 변경되었는지 확인하는 기능이다. 디버깅할 때 어떤 상태가 언제 변경되었는지 확인할 때 매우 유용한 기능이다.
+![image](https://media.oss.navercorp.com/user/244/files/86db47de-79a2-11e6-8667-3dcb4aa016e1)
+
+그외에 다양한 기능은 [redux-devtools](https://github.com/gaearon/redux-devtools)에서 확인할 수 있다.
+
+
+
