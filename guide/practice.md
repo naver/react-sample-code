@@ -148,7 +148,7 @@ export default combineReducers({
 ```
 
 ## store
-해당 폴더에는 `index.js`하나만 있으며 주로 하는 미들웨어를 설정하는 일을 한다. 예를 들어 비동기 통신을 사용하기 위에 `redux-thunk`을 [설정](#비동기_처리)하거나, 히스토리 관리를 하기 위해 router을 설정하거나, 디버깅을 위해 [react-devtool](#디버깅_도구)을 설정하는 일을 주로 한다.
+해당 폴더에는 `index.js`하나만 있으며 주로 하는 미들웨어를 설정하는 일을 한다. 예를 들어 비동기 통신을 사용하기 위에 `redux-thunk`을 [설정](#Middleware)하거나, 히스토리 관리를 하기 위해 router을 설정하거나, 디버깅을 위해 [react-devtool](#디버깅_도구)을 설정하는 일을 주로 한다.
 
 ![image](https://media.oss.navercorp.com/user/244/files/9f6da792-7538-11e6-80dd-bf20b353cd59)
 
@@ -168,7 +168,67 @@ export default function configureStore(reducer, initialState = {}) {
 ```
 
 
-## 비동기 처리
+## Middleware
+
+미들웨어는 간단하게 보면 `dispatch` 전/후에 원하는 작업을 할 수 있다. 예를 들어, `dispatch`전에 전/후를 `state`의 변화를 알 수 있거나, 비동기 통신의 경우 `callback`에서 `dispatch`을 할 수 있다. 좀 더 자세한 내용은 링크를 참고하길 바란다. [링크](https://dobbit.github.io/redux/docs_kr/advanced/Middleware.html)
+
+이중 많이 사용하는 미들웨어의 활용의 예를 알아본다.
+
+### 비동기 처리
+개발하다보면 서버에서 비동기로 데이터를 가져와서 처리하거나, 애니메이션이 끝난 후 처리하기 해야 하는 상황이 있다.
+```js
+export function addTodo(text) {
+	return { type: ADD_TODO,  text};
+}
+```
+예를 들어, 위의 코드에서 `text`을 `Ajax`로 서버에 전달할 후 `todo`을 추가하고 싶다고 하면, 일반적인 `actionCreator`로는 처리할 수 없다.  그래서 [`redux-thunk`](https://github.com/gaearon/redux-thunk)와 같은 미들웨어를 사용한다. 여기서는 `thunk`을 예로 설명한다. 그 밖에 비동기를 처리하는 다양한 라이브러리가 있으며 [Generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator)을 사용하는 [`redux-saga`](https://github.com/yelouafi/redux-saga)가 있으며 차이는 [링크](http://jaysoo.ca/2016/01/03/managing-processes-in-redux-using-sagas/)을 통해서 알 수 있다.
+
+**[store/index.js]**
+```js
+import { createStore, compose, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+
+export default function configureStore(reducer, initialState = {}) {
+
+  const enhancer = compose(
+    applyMiddleware(thunk/* , middleware 추가*/)
+  );
+
+  return createStore(reducer, initialState, enhancer);
+}
+```
+
+**action/todo.js**
+아래와 같이 dispatch을 인자로 받는 함수를 만들고 응답이 온 후 dispatch을 호출하면 정상적으로 비동기 통신을 적용할 수 있다.
+```js
+export function addTodo2(text) {
+  return (dispatch) => {
+	return fetch("api/add.json").then(
+		res => res.json().then(data => dispatch(addTodo(data.status)))
+	);
+  };
+}
+```
+
+## 로깅하기
+로깅에서도 활용할 수 있다. [간단하게 직접 구현](https://dobbit.github.io/redux/docs_kr/advanced/Middleware.html#%EC%9D%BC%EA%B3%B1%EA%B0%80%EC%A7%80-%EC%98%88%EC%8B%9C) 할 수 있지만, [`redux-logger`](https://github.com/evgenyrodionov/redux-logger) 와 같은 라이브러리를 사용하여 로깅을 할 수 있다.
+
+```js
+import { createStore, compose, applyMiddleware } from "redux";
+import promise from 'redux-promise';
+import createLogger from 'redux-logger';
+import thunk from "redux-thunk";
+
+export default function configureStore(reducer, initialState = {}) {
+	const logger = createLogger();
+	const enhancer = compose(
+		applyMiddleware(thunk,promise, logger/* , middleware 추가*/)
+	);
+	return createStore(reducer, initialState, enhancer);
+}
+```
+
+이렇게 `middleware`을 사용하여 `dispatch전/후`로 관련한 작업을 사용할 수 있다. 하지만 로깅의 경우 위와 같이 `redux-logger`을 사용하기도 하지만 일반적으로는 [디버깅 도구](#디버깅_도구) 사용하여 디버깅하기 때문에 참고만 하길 바란다.
 
 ## state/prop의 구분
 
