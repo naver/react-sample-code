@@ -148,7 +148,7 @@ export default combineReducers({
 ```
 
 ## store
-해당 폴더에는 `index.js`하나만 있으며 주로 하는 미들웨어를 설정하는 일을 한다. 예를 들어 비동기 통신을 사용하기 위에 `redux-thunk`을 [설정](#Middleware)하거나, 히스토리 관리를 하기 위해 router을 설정하거나, 디버깅을 위해 [react-devtool](#디버깅_도구)을 설정하는 일을 주로 한다.
+해당 폴더에는 `index.js`하나만 있으며 주로 하는 미들웨어를 설정하는 일을 한다. 예를 들어 비동기 통신을 사용하기 위에 `redux-thunk`을 [설정](#Middleware)하거나, 히스토리 관리를 하기 위해 router을 설정하거나, 디버깅을 위해 [react-devtool](#디버깅-도구)을 설정하는 일을 주로 한다.
 
 ![image](https://media.oss.navercorp.com/user/244/files/9f6da792-7538-11e6-80dd-bf20b353cd59)
 
@@ -199,7 +199,8 @@ export default function configureStore(reducer, initialState = {}) {
 ```
 
 **action/todo.js**
-아래와 같이 dispatch을 인자로 받는 함수를 만들고 응답이 온 후 dispatch을 호출하면 정상적으로 비동기 통신을 적용할 수 있다.
+
+아래와 같이 `dispatch`을 인자로 받는 함수를 만들고 응답이 온 후 `dispatch`을 호출하면 정상적으로 비동기 통신을 적용할 수 있다.
 ```js
 export function addTodo2(text) {
   return (dispatch) => {
@@ -228,7 +229,7 @@ export default function configureStore(reducer, initialState = {}) {
 }
 ```
 
-이렇게 `middleware`을 사용하여 `dispatch전/후`로 관련한 작업을 사용할 수 있다. 하지만 로깅의 경우 위와 같이 `redux-logger`을 사용하기도 하지만 일반적으로는 [디버깅 도구](#디버깅_도구) 사용하여 디버깅하기 때문에 참고만 하길 바란다.
+이렇게 `middleware`을 사용하여 `dispatch전/후`로 관련한 작업을 사용할 수 있다. 하지만 로깅의 경우 위와 같이 `redux-logger`을 사용하기도 하지만 일반적으로는 [디버깅 도구](#디버깅-도구) 사용하여 디버깅하기 때문에 참고만 하길 바란다.
 
 ## state/prop의 구분
 
