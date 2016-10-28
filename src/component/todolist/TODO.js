@@ -1,21 +1,20 @@
-
-
 import React, { Component } from 'react';
 
-// class TODO extends Component {
-//   render() {
-//   	const {id, todo, complete, onClick} = this.props;
-//     return (
-//       <li id={id} 
-//       	onClick={() => onClick({
-//       		id : id, 
-//       		complete : !complete
-//       	})}
-//       	className={!!complete ? 'completed' : ''}
-//       >{todo}</li>
-//     );
-//   }
-// }
+class TODO extends Component {
+
+    render() {
+        const {id, todo, complete, onClick} = this.props;
+        return (
+            <li id={id} 
+                onClick={() => onClick({
+                    id : id, 
+                    complete : !complete
+                })}
+                className={!!complete ? 'completed' : ''}
+            >{todo}</li>
+        );
+    }
+}
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -27,47 +26,47 @@ function getRandomColor() {
 }
 
 
-class TODO extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            style: {
-                backgroundColor: getRandomColor(),
-                "userSelect": "none"
-            }
-        };
-        this.changeColor = this.changeColor.bind(this);
-        // console.log(window.iii);
-        // if(window.iii == undefined){
-        //   window.setTimeout(_ => {
-        //   console.log("timmer");
-        //     this.changeColor();
-        //   },2000);  
-        //   window.iii = 1;
-        // }else{
-        //   window.iii++;
-        // }
+// class TODO extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             style: {
+//                 backgroundColor: getRandomColor(),
+//                 "userSelect": "none"
+//             }
+//         };
+//         this.changeColor = this.changeColor.bind(this);
+//         // console.log(window.iii);
+//         // if(window.iii == undefined){
+//         //   window.setTimeout(_ => {
+//         //   console.log("timmer");
+//         //     this.changeColor();
+//         //   },2000);  
+//         //   window.iii = 1;
+//         // }else{
+//         //   window.iii++;
+//         // }
         
-    }
-    changeColor(){
-        console.trace("test");
-        // debugger;
-        this.setState({
-            style: {
-                backgroundColor: getRandomColor()
-            }
-        });
-    }
-    render() {
-        const {id, todo, complete} = this.props;
-        return (
-          <li id={id} 
-            onClick={this.changeColor}
-            style={this.state.style}
-          >{todo}</li>
-        );
-    }
-}
+//     }
+//     changeColor(){
+//         console.trace("test");
+//         // debugger;
+//         this.setState({
+//             style: {
+//                 backgroundColor: getRandomColor()
+//             }
+//         });
+//     }
+//     render() {
+//         const {id, todo, complete} = this.props;
+//         return (
+//           <li id={id} 
+//             onClick={this.changeColor}
+//             style={this.state.style}
+//           >{todo}</li>
+//         );
+//     }
+// }
 
 
 
