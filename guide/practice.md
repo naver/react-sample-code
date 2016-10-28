@@ -70,8 +70,8 @@ class TODOList extends Component {
   }
 }
 
-
-const todolistStateToProps = (state) => {
+// 아래 부분에 대한 코드는 아래 connect 부분을 참고한다.
+const todolistStateToProps = (state) => { 
   return {
     todos: state.todos
   }
@@ -232,5 +232,139 @@ export default function configureStore(reducer, initialState = {}) {
 이렇게 `middleware`을 사용하여 `dispatch전/후`로 관련한 작업을 사용할 수 있다. 하지만 로깅의 경우 위와 같이 `redux-logger`을 사용하기도 하지만 일반적으로는 [디버깅 도구](#디버깅-도구) 사용하여 디버깅하기 때문에 참고만 하길 바란다.
 
 ## state/prop의 구분
+
+React에서는 state와 prop을 구분하고 있다. 얼핏보면 두개가 비슷해보이지만, 사용방법이 다르다. 간단하게 구분하자면, state는 독립적인 component의 상태, prop은 global하게 App에서 관리하는 상태라고 생각하면 된다.
+> 예를 들어, 특정 영역이 클릭했을 때 하이라이팅이 되어야 한다고 생각해보자. 
+
+하이라이팅 되는건 부모 컴포넌트나 앱에서 알아야 하는 부분은 아니고 그냥 자신 컴포넌트의 스타일링에 대한 부분이기 때문에 아래와 같이 setState로 state을 변경한다. setState가 발생하면 자신의 컴포넌트의 render가 호촐되어 해당 컴포넌트만 갱신한다.
+
+```js
+class TODO extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			style: {
+				backgroundColor: getRandomColor()
+			}
+		};
+		this.changeColor = this.changeColor.bind(this);
+	}
+	changeColor(){
+		this.setState({
+			style: {
+				backgroundColor: getRandomColor()
+			}
+		});
+	}
+	render() {
+		const {id, todo, complete} = this.props;
+		return (
+		  <li id={id} 
+		  	onClick={this.changeColor}
+		  	style={this.state.style}
+		  >{todo}</li>
+		);
+	}
+}
+```
+Prop은 global하게 App에서 관리하는 상태이다. 
+> 예를 들어, 위와 같이 단순히 색상을 바꾸는게 아니라 아래와 같이 `complete`을 처리한다고 생각해보자.
+
+`complete`는 `TODO`만의 상태이기보다 App의 TODO 상태가 맞기 때문에 이런 경우는 아래와 같이 `dispatch`을 이용하여 상태를 관리한다. `prop`의 경우는 container component에서 관리한다.
+```js
+class TODO extends Component {
+  render() {
+  	const {id, todo, complete, onClick} = this.props;
+    return (
+      <li id={id} 
+      	onClick={() => onClick({
+      		id : id, 
+      		complete : !complete
+      	})}
+      	className={!!complete ? 'completed' : ''}
+      >{todo}</li>
+    );
+  }
+}
+```
+
+요약하면, 컴포넌트 자체의 상태(색상, 애니메이션...)는 `state`로 처리하고 전체적으로 관리(Ajax..)해야 하는 경우는 부모에게 `prop`으로 받아서 처리한다. 물론 `prop`의 경우는 App전반적으로 갱신이 되기 때문에 비교적 `state`보다는 느릴 수 밖에 없기 때문에 효과적으로 `state`을 사용하면 좋지만, `prop`으로 처리해야 하는 이슈를 `state`로 처리하는 건 코드를 더 어렵게 한다. 좀 더 자세한 내용은 [props vs state](https://github.com/uberVU/react-guide/blob/master/props-vs-state.md)이 도움이 된다.
+
+## connect
+`prop`은 `state`와 다르게 `container component`에서 관리한다. 그래서 `container component`에서 `presentational component`으로 전달해야 하는데 이 때 사용하는 메서드가 `react-redux`에서 제공하는 `connect`이다.
+
+**[component/todolist/TODOList.js]**
+```js
+class TODOList extends Component {
+  render() {
+  	const {todos, onClick} = this.props;
+    return (
+      <ul>
+    		{todos.map(todo =>
+    			<Todo 
+    				key={todo.id}
+    				onClick={onClick}
+    				{...todo}
+    			/>
+    		)}
+      </ul>
+    );
+  }
+}
+
+const todolistStateToProps = (state) => {
+  return {
+    todos: state.todos
+  }
+}
+
+const todolistDispatchToProps = (dispatch) => {
+    return {
+        onClick(data){
+          dispatch(complete2(data))
+        }
+    }
+}
+export default connect(todolistStateToProps,todolistDispatchToProps)(TODOList);
+```
+`container component`인 TODOList에서 connect로 속성과 dispatch를 연결하고 이를 `Todo`에게 전달하여 사용한다.
+
+**[component/todolist/TODO.js]**
+```js
+class TODO extends Component {
+  render() {
+  	const {id, todo, complete, onClick} = this.props;
+    return (
+      <li id={id} 
+      	onClick={() => onClick({
+      		id : id, 
+      		complete : !complete
+      	})}
+      	className={!!complete ? 'completed' : ''}
+      >{todo}</li>
+    );
+  }
+}
+```
+connect는 2가지을 인자로 받는데 첫 번째는 인자로 현재 `state`을 받는 함수와 두 번째는 `dispatch`을 인자로 받는 함수이다. 첫 번째 함수는 속성을 전달할 때 사용되며 전달할 때 값을 가공할 수 있다. 두 번째 함수는 dispatch을 전달 받아 사용한다. 
+
+
+## propTypes/defaultProps
+prop은 타입과 기본 값을 propTypes와 defaultProps으로 설정할 수 있다.
+```js
+
+TODO.propTypes = {
+	id: PropTypes.string,
+	complete: PropTypes.bool,
+	onCreated: PropTypes.func
+};
+
+TODO.defaultProps = {
+	complete: false
+};
+```
+`propTypes`은 개발 모드에서만 동작하며, 자세한 타입의 종류는 [propTypes](https://facebook.github.io/react/docs/reusable-components.html#prop-validation)에서 확인할 수 있다.
+
+
 
 ## 디버깅 도구
