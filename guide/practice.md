@@ -32,6 +32,8 @@ npm run build // production mode로 파일 빌드해서 build폴더에 생성
 `action`폴더는 사용하는 명령어와 API통신등의 작업을 하는 `action메서드`들로 구성된 파일이다. 어떤 서비스의 경우에는 모든 command와 action을 한곳에 모아두기도 하고, 각 도메인 별로 구분하기도 한다.
 API와 같이 비동기 통신이 필요한 경우는 뒤(#비동기_처리)에서 다룰 [react-thunk](https://github.com/gaearon/redux-thunk), [react-saga](https://github.com/barbuza/react-saga)을 사용해야 하기 때문에 간단한 예제를 작성한다.
 
+![image][https://media.oss.navercorp.com/user/244/files/9ff473ce-9d30-11e6-8d8c-4ded3cb8f79d]
+
 **[action/todo.js]**
 ```js
 // action type
@@ -46,6 +48,7 @@ export function addTodo(text) {
 
 ## component
 `component`는 `action`과 다르게 보통 `domain`별로 구분되어 있다. 각 컴포넌트는 `Container Component`와 `Presentational Component`을 구분해서 개발을 한다. `Container Component`는 다수의 `Presentational Component`로 구성되어 있으며 데이터나 공통으로 관리해야 하는 객체, 다른 컴포넌트간의 인터랙션등을 관리하는 컴포넌트이다.  `Presentational Component`는 우리가 일반적으로 알고있는 `UI컴포넌트`로 생각하면 된다. 즉, `UI컴포넌트`인 `Presentational Component`을 `Container Component`에서 관리한다고 생각하면 간단하다. 그리고 좀 더 자세히 알아보고 싶다면 [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.jgn6dixap)을 참고하실 바란다.
+
 ![image](https://media.oss.navercorp.com/user/244/files/54b378b6-7421-11e6-8690-33fffedc5f96)
 
 **Container Component(component/todolist/TODOList.js)**
@@ -105,6 +108,7 @@ class TODO extends Component {
 ## reducer
 `reducer`는 `action`에서 실행시킨 변경을 기존의 상태에서 적용하는 일을 한다. `reducer`는 `action`과 같이 하나로 만들기도 하지만 각 `domain`별로 만들기도 한다. 혹은 `action`파일과 `reducer`파일을 합쳐서 사용하는 [`duck이라는 기법`](https://github.com/erikras/ducks-modular-redux)이 있다. 여기서는 `action`을 `reducer`와 분리하고 `reducer`을 다수의 파일로 분리하는 방법을 사용한다.
 아래와 같이 각각의 파일을 분리하고 `index.js`에서는 분리한 `reducer`들을 합치는 작업을 한다.
+
 ![image](https://media.oss.navercorp.com/user/244/files/8cc0cdcc-742a-11e6-8869-06a9d8732da0)
 
 **[reducer/todo.js]**
