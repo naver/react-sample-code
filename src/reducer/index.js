@@ -5,3 +5,11 @@ export default combineReducers({
   todos
 });
 
+// export default (state = {}, action) => {
+//   return {
+//      todos: todos( 
+//       state.todos,
+//       action
+//     )
+//   };
+// };

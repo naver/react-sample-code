@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { complete2 } from '../../action/todo';
+import { complete, complete2 } from '../../action/todo';
+// import todoAction from '../../action/index';
+// const { complete, complete2 } = todoAction.todo;
 import Todo from './TODO';
 
 class TODOList extends Component {
@@ -34,7 +36,8 @@ const todolistStateToProps = (state) => {
 const todolistDispatchToProps = (dispatch) => {
     return {
         onClick(data){
-          dispatch(complete2(data))
+          // dispatch(complete2(data))
+          dispatch(complete(data))
         }
     }
 }

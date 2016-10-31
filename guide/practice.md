@@ -28,20 +28,19 @@ npm run build // production mode로 파일 빌드해서 build폴더에 생성
 위의 그림에서 보듯이 크게 `action`, `component`, `reducer`, `store`로 구분되어 있다.
 
 ## action
-`action`폴더는 사용하는 명령어와 API통신등의 작업을 하는 `action메서드`들로 구성된 파일이다. 어떤 서비스의 경우에는 모든 command와 action을 한곳에 모아두기도 하고, 각 도메인 별로 구분하기도 한다.
-API와 같이 비동기 통신이 필요한 경우는 뒤(#비동기_처리)에서 다룰 [react-thunk](https://github.com/gaearon/redux-thunk), [react-saga](https://github.com/barbuza/react-saga)을 사용해야 하기 때문에 간단한 예제를 작성한다.
+`action`폴더는 `사용하는 명령어`와 API통신등의 작업을 하는 `action메서드`들로 구성된 파일이다. 어떤 서비스의 경우에는 모든 `명령어`와 `action`을 한곳에 모아두기도 하고, 각 도메인 별로 구분하기도 한다. 비동기 통신이 필요한 경우는 [아래](#비동기-처리)에서 다룰 [react-thunk](https://github.com/gaearon/redux-thunk), [react-saga](https://github.com/barbuza/react-saga)을 사용해야 하기 때문에 간단한 예제를 작성한다.
 
 ![image](https://media.oss.navercorp.com/user/244/files/9ff473ce-9d30-11e6-8d8c-4ded3cb8f79d)
 
 **[action/todo.js]**
 ```js
-// action type
-export const ADD_TODO = 'ADD_TODO'
+// action type(명령어)
+export const COMPLETE_TODO = 'COMPLETE_TODO'
 
 
-// action creators
-export function addTodo(text) {
-  return { type: ADD_TODO,  text};
+// action creators(action메서드)
+export function complete({complete, id}) {
+	return { type: COMPLETE_TODO,  complete, id};
 }
 ```
 
@@ -69,20 +68,23 @@ class TODOList extends Component {
   }
 }
 
-// 아래 부분에 대한 코드는 아래 connect 부분을 참고한다.
+// Container에서 Presentational으로 전달
 const todolistStateToProps = (state) => { 
   return {
     todos: state.todos
   }
 }
 
-const todolistDispatchToProps = (dispatch) => { // Container에서 Presentational으로 전달
+// Container에서 Presentational으로 전달
+const todolistDispatchToProps = (dispatch) => { 
     return {
         onClick(data){
-          dispatch(complete(data))
+          dispatch(complete(data)) // action 메서드
         }
     }
 }
+
+// 연결
 export default connect(todolistStateToProps,todolistDispatchToProps)(TODOList);
 ```
 
@@ -90,7 +92,7 @@ export default connect(todolistStateToProps,todolistDispatchToProps)(TODOList);
 ```js
 class TODO extends Component {
   render() {
-  	const {id, todo, complete, onClick} = this.props; // Container에서 연결된 prop 사용
+  	const {id, todo, complete, onClick} = this.props; // Container에서 연결된 prop/action들
     return (
       <li id={id} 
       	onClick={() => onClick({
@@ -103,6 +105,8 @@ class TODO extends Component {
   }
 }
 ```
+이렇게 `Presentational Component`에서는 비지니스 로직이 없고 비지니스 로직은 `Container Component`에서 개발한다. 이렇게 해야 TODO컴포넌트의 재활용성이 높아진다.
+
 
 ## reducer
 `reducer`는 `action`에서 실행시킨 변경을 기존의 상태에서 적용하는 일을 한다. `reducer`는 `action`과 같이 하나로 만들기도 하지만 각 `domain`별로 만들기도 한다. 혹은 `action`파일과 `reducer`파일을 합쳐서 사용하는 [`duck이라는 기법`](https://github.com/erikras/ducks-modular-redux)이 있다. 여기서는 `action`을 `reducer`와 분리하고 `reducer`을 다수의 파일로 분리하는 방법을 사용한다.
@@ -429,5 +433,32 @@ devtools을 사용하면, store변경. action의 실행등 다양한 정보들�
 
 그외에 다양한 기능은 [redux-devtools](https://github.com/gaearon/redux-devtools)에서 확인할 수 있다.
 
+# 훑어보기
+## 빠르게 `redux` 이해하기
+`redux`을 사용하면 하나의 `store`을 가지고 있기 때문에 `state`을 변경했을 때 일부분만 바뀌는게 아니라 변경된 새로운 상태를 가진다고 생각해야 한다. 그때, 상태를 변경하는 함수를 `reducer`로 만들게 되는데 `dipatch`마다 이 `reducer`들을 호출하여 상태를 갱신한다. 이 때, 여러 `reducer`을 쉽게 처리하기 위해 만든 함수가 `redux`의 [combineReducers](https://github.com/reactjs/redux/blob/master/src/combineReducers.js#L102-L158)이고 `reducers`을 [이렇게](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/reducer/index.js#L4-L6) 합쳐서 사용한다.
 
+[createStore](https://github.com/reactjs/redux/blob/master/src/createStore.js#L248-L250)는 인자로 `reducers`을 받으며, 여기서는 크게 `subscribe`, `dispatch`을 가지고 있다. `store`은 컴포넌트들에게 [`Provider`](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/index.js#L19)로 전달한다.
+[`dispatch`](https://github.com/reactjs/redux/blob/master/src/createStore.js#L170)는 `state`을 변경하기 위해 사용한다. `dispatch`로 들어온 `state`는 `reducer`의 인자로 호출하며 변경된 `state`을 현재 `state로` 변경한다. 그리고 `subscribe`로 등록한 [`listener`을 호출](https://github.com/reactjs/redux/blob/master/src/createStore.js#L109)한다.
+> 여기서는 의미상 변경이라고 했지만, 새로 생성된 값이라고 이해하길 바란다.
+
+## 동작 흐름
+
+- 브라우저의 이벤트
+- [컴포넌트 이벤트](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js#L36)
+- [action creator 호출](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js#L37)
+- [store dispatch 호출](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js#L37)
+- [reducer들 호출](https://github.com/reactjs/redux/blob/master/src/createStore.js#L170)
+	- [todos reducer 호출](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/reducer/todos.js#L29-L40)
+- [subscribe한 listener 호출](https://github.com/reactjs/redux/blob/master/src/createStore.js#L178)
+	- [render호출하여 View 갱신](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/index.js#L26)
+
+![image](https://media.oss.navercorp.com/user/244/files/c57ddcbc-9f96-11e6-8386-674b279fb755)
+
+작업을 할 때는 위의 흐름을 맞춰서 아래와 같이 좀 더 쉽게 작업할 수 있다.
+1. `React 컴포넌트` 만들기 : `하위 React컴포넌트`로 `prop`, `dispatch` 전달
+2. `action command/create` 만들기 : `state` 변경, 비동기 처리를 위해 `thunk`을 사용
+3. `reducer` 생성 : `store` 구조
+4. `dispatch`에 `action결과` 전달
+
+여기까지 `React/Redux`을 사용하여 개발하는 방법에 대해서 알아보았다. 다음으로는 `React`에서 어떻게 이벤트를 처리하고, `DOM`을 렌더링하는지 자세한 방법을 알아보도록 한다.
 
