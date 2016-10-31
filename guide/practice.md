@@ -454,7 +454,7 @@ devtools을 사용하면, store변경. action의 실행등 다양한 정보들�
 
 ![image](https://media.oss.navercorp.com/user/244/files/c57ddcbc-9f96-11e6-8386-674b279fb755)
 
-작업을 할 때는 위의 흐름을 맞춰서 아래와 같이 좀 더 쉽게 작업할 수 있다.
+작업을 할 때는 위의 흐름을 맞춰 아래와 같이 작업하면 좀 더 쉽게 할 수 있다.
 - [`React 컴포넌트` 만들기](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js) : `하위 React컴포넌트`로 `prop`, `dispatch` 전달
 - [`action command/create` 만들기](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/action/todo.js#L20-L30) : `state` 변경, 비동기 처리를 위해 `thunk`을 사용
 - [`reducer` 생성](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/reducer/todos.js#L29-L40) : `store` 구조
