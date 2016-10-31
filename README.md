@@ -9,6 +9,7 @@
   - [Middleware](https://oss.navercorp.com/au-platform/react-guide/blob/master/guide/practice.md#middleware)
   - [state/prop 구분](https://oss.navercorp.com/au-platform/react-guide/blob/master/guide/practice.md#stateprop의-구분)
   - [디버깅 도구](https://oss.navercorp.com/au-platform/react-guide/blob/master/guide/practice.md#디버깅-도구)
+  - [훑어보기](https://oss.navercorp.com/au-platform/react-guide/blob/master/guide/practice.md#훑어보기)
 
 ## React는 어떻게 동작하는가?
   - Virtual DOM
