@@ -456,9 +456,9 @@ devtools을 사용하면, store변경. action의 실행등 다양한 정보들�
 
 작업을 할 때는 위의 흐름을 맞춰 아래와 같이 작업하면 좀 더 쉽게 할 수 있다.
 - [`React 컴포넌트` 만들기](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js) : `하위 React컴포넌트`로 `prop`, `dispatch` 전달
-- [`action command/create` 만들기](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/action/todo.js#L20-L30) : `state` 변경, 비동기 처리를 위해 `thunk`을 사용
+- [`action command/create` 만들기](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/action/todo.js#L20-L30) : `state` 변경, 비동기 처리
 - [`reducer` 생성](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/reducer/todos.js#L29-L40) : `store` 구조
 - [`dispatch`에 `action결과` 전달](https://oss.navercorp.com/au-platform/react-guide/blob/master/src/component/todolist/TODOList.js#L40)
 
-여기까지 `React/Redux`을 사용하여 개발하는 방법에 대해서 알아보았다. 다음으로는 `React`에서 어떻게 이벤트를 처리하고, `DOM`을 렌더링하는지 자세한 방법을 알아보도록 한다.
+여기까지 `React/Redux`을 사용하여 개발하는 방법에 대해서 알아보았다. [다음으로는 `React`가 이벤트를 어떻게 처리하고, `DOM`을 어떻게 렌더링하는지 알아보도록 한다.](internal.md)
 
