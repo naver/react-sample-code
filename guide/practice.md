@@ -1,4 +1,5 @@
 프로젝트에 `React/Redux`를 적용할 때 미리 알고 있으면 좋을만한 practice을 정리한다. 만약에 기본적인 `React의 사용법을 다루지 않기 때문에 `React`의 사용법을 학습해야 한다.
+여기서 말하는 방법으로 모두 맞춰서 하기보다는, 프로젝트 전에 이 프로젝트로 프로토타이핑하면서 전체적인 흐름을 익힌 후 자신의 프로젝트에 맞게 개선해서 사용하기를 기대하고 만든 문서이다. 물론 가능하면 같은 모습을 가진다면, 좀 더 좋지 않을까 생각하며, 좋은 제안은 이슈에 등록해주길 바란다.
 
 # 시작하기
 `React`을 사용하기 위해 설정해야 하는 도구들이 많다. 그래서 직접 설정하는 방법도 있지만, [`React Starter Kit`](https://www.reactstarterkit.com/)등 다양한 scaffold 도구를 사용한다. 여기서는 `facebook`에서 만든 [`create-react-app`](https://github.com/facebookincubator/create-react-app) 도구를 사용한다. `create-react-app`을 사용한 이유는 `react`을 개발하는 `facebook`이 만들었고, 다른 도구에 비해서 기능을 작지만, 쉽고 편하게 쓸 수 있다. 만약에 `server rendering`등 다양한 기능을 사용하고 싶다면, `React Starter Kit`도 좋은 선택이 될 수 있다.
