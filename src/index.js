@@ -23,5 +23,13 @@ const render = () => {
   )
 };
 
+setTimeout( _ => {
+	([...document.querySelectorAll("li")]).forEach(e => {
+		e.addEventListener("click",_=>{
+			_.stopPropagation();
+		})
+	});
+}, 1000);
+
 store.subscribe(render);
 render();
